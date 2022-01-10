@@ -7,7 +7,7 @@ const NavBar = (props: any) => {
   console.log(auth.user?.uid);
   return (
     <NavbarContainer>
-      <Logo />
+      <Logo>VREDDIT</Logo>
       <Menu>
         {auth.user ? (
           <>
@@ -15,7 +15,14 @@ const NavBar = (props: any) => {
             <Button onClick={() => auth.signout()}>Signout</Button>
           </>
         ) : (
-          <Link href="/signin">Signin</Link>
+          <>
+            <Link href="/register" passHref>
+              <Button>Register</Button>
+            </Link>
+            <Link href="/login" passHref>
+              <Button>Login</Button>
+            </Link>
+          </>
         )}
       </Menu>
     </NavbarContainer>
@@ -24,10 +31,30 @@ const NavBar = (props: any) => {
 
 export default NavBar;
 
-const NavbarContainer = styled.nav``;
+const NavbarContainer = styled.nav`
+  display: flex;
+  height: 60px;
+  align-items: center;
+  background: rgb(211, 236, 245);
+`;
 
-const Logo = styled.div``;
+const Logo = styled.div`
+  font-size: 30px;
+  margin-left: 20px;
+`;
 
-const Menu = styled.div``;
+const Menu = styled.div`
+  margin-left: auto;
+  margin-right: 20px;
+`;
 
-const Button = styled.button``;
+const Button = styled.button`
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  width: 100px;
+  height: 40px;
+  background: rgb(237, 171, 166);
+  font-weight: 700;
+  margin-left: 10px;
+`;
