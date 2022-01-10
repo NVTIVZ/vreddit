@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { ProvideAuth } from '../hooks/use-auth';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -20,7 +21,9 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
+        <ProvideAuth>
+          <Component {...pageProps} />
+        </ProvideAuth>
       </ThemeProvider>
     </>
   );
