@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 const NavBar = (props: any) => {
   const auth = useAuth();
+  console.log(auth.user?.uid);
   return (
     <NavbarContainer>
       <Logo />

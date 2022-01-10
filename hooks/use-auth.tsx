@@ -1,19 +1,12 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
-import firebase from 'firebase/compat/app';
+import { User } from '@firebase/auth-types';
+import firebase from '../firebase';
 import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-
-firebase.initializeApp({
-  apiKey: process.env.NEXT_PUBLIC_APIKEY,
-  authDomain: process.env.NEXT_PUBLIC_AUTHDOMAIN,
-  projectId: process.env.NEXT_PUBLIC_PROJECTID,
-  appID: process.env.NEXT_PUBLIC_APPID,
-});
 
 interface contextTypes {
-  user: firebase.User | false;
-  signin: (email: string, password: string) => Promise<firebase.User | null>;
-  signup: (email: string, password: string) => Promise<firebase.User | null>;
+  user: User | null;
+  signin: (email: string, password: string) => Promise<User | null>;
+  signup: (email: string, password: string) => Promise<User | null>;
   signout: () => Promise<void>;
   sendPasswordResetEmail: (email: string) => Promise<boolean>;
   confirmPasswordReset: (code: string, password: string) => Promise<boolean>;
@@ -32,7 +25,7 @@ export const useAuth = () => {
 };
 
 function useProvideAuth() {
-  const [user, setUser] = useState<firebase.User | boolean | null>();
+  const [user, setUser] = useState<User | boolean | null>();
 
   const signin = async (email: string, password: string) => {
     const response = await firebase
