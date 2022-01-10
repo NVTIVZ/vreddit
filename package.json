@@ -8,17 +8,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next-auth/firebase-adapter": "0.1.2-pr.183-76202b42.8",
     "dotenv": "^10.0.0",
     "firebase": "^9.6.2",
-    "firebase-admin": "^10.0.1",
     "formik": "^2.2.9",
     "next": "12.0.7",
-    "next-auth": "4.0.6",
-    "next-firebase-auth": "^1.0.0-canary.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-firebaseui": "^6.0.0",
     "styled-components": "^5.3.3"
   },
   "devDependencies": {

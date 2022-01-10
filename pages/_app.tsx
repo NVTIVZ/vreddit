@@ -3,10 +3,16 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { ProvideAuth } from '../hooks/use-auth';
 
 const GlobalStyle = createGlobalStyle`
-  body {
+  body,div,p,ul,li {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+
+  }
+
+  body{
+    background:#072227
   }
 `;
 

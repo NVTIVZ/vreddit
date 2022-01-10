@@ -7,7 +7,10 @@ const NavBar = (props: any) => {
   console.log(auth.user?.uid);
   return (
     <NavbarContainer>
-      <Logo>VREDDIT</Logo>
+      <Link href="/" passHref>
+        <Logo>VREDDIT</Logo>
+      </Link>
+
       <Menu>
         {auth.user ? (
           <>
@@ -35,12 +38,13 @@ const NavbarContainer = styled.nav`
   display: flex;
   height: 60px;
   align-items: center;
-  background: rgb(211, 236, 245);
+  background: #35858b;
 `;
 
 const Logo = styled.div`
   font-size: 30px;
   margin-left: 20px;
+  cursor: pointer;
 `;
 
 const Menu = styled.div`
@@ -54,7 +58,7 @@ const Button = styled.button`
   border-radius: 6px;
   width: 100px;
   height: 40px;
-  background: rgb(237, 171, 166);
+  background: #4fbdba;
   font-weight: 700;
   margin-left: 10px;
 `;
