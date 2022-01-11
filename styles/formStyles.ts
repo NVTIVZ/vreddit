@@ -20,7 +20,7 @@ export const Label = styled.label`
   font-size: 18px;
   display: flex;
   flex-direction: column;
-  height: 75px;
+  height: 80px;
   font-weight: 600;
 `;
 export const Text = styled.p`
@@ -32,8 +32,15 @@ export const Input = styled.input`
   width: 350px;
   height: 35px;
   border: 1px solid #ccc;
-  background-color: #fff;
   margin-top: auto;
+  margin-bottom: 5px;
+  background: #ededed;
+  transition: background 0.6s ease-in-out;
+  &:focus,
+  &:hover {
+    outline: none;
+    background: white;
+  }
 `;
 
 export const Button = styled.button`

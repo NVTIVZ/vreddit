@@ -39,6 +39,7 @@ const NavbarContainer = styled.nav`
   height: 60px;
   align-items: center;
   background: #35858b;
+  border-bottom: solid 2px rgba(255, 255, 255, 0.3);
 `;
 
 const Logo = styled.div`
