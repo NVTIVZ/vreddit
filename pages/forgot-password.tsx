@@ -1,32 +1,20 @@
 import { Formik } from 'formik';
 import Layout from '../components/Layout';
 import { useAuth } from '../hooks/use-auth';
-import {
-  Button,
-  Form,
-  Input,
-  Label,
-  Text,
-  Title,
-  Link,
-} from '../styles/formStyles';
-import { useRouter } from 'next/router';
-import NextLink from 'next/link';
+import { Button, Form, Input, Label, Text, Title } from '../styles/formStyles';
 
-const Login = () => {
+const ForgotPassword = () => {
   const auth = useAuth();
-  const router = useRouter();
 
   return (
     <Layout>
-      <Title>Login</Title>
+      <Title>Password Recovery</Title>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ email: '' }}
         onSubmit={async (values) => {
           console.log(values);
-          const response = await auth.signin(values.email, values.password);
+          const response = await auth.sendPasswordResetEmail(values.email);
           console.log(response);
-          router.push('/');
         }}
         validate={(values) => {
           let errors = {} as { email: string; password: string };
@@ -41,12 +29,6 @@ const Login = () => {
             errors.email = 'Email is required';
           } else if (!regex.test(values.email)) {
             errors.email = 'Invalid email address';
-          }
-
-          if (!values.password) {
-            errors.password = 'A password is required';
-          } else if (values.password.length < 6) {
-            errors.password = 'Password must be 6 characters';
           }
           return errors;
         }}
@@ -75,23 +57,6 @@ const Login = () => {
                   placeholder="Email"
                 />
               </Label>
-              <Label>
-                Password:
-                {touched.password && errors.password && (
-                  <Text color="#f24b3f">{errors.password}</Text>
-                )}
-                <Input
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                />
-              </Label>
-              <NextLink href="/forgot-password" passHref>
-                <Link>Forgot Password?</Link>
-              </NextLink>
               <Button type="submit">Submit</Button>
             </Form>
           );
@@ -101,4 +66,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
