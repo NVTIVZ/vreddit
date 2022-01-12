@@ -1,6 +1,5 @@
 import { Formik } from 'formik';
-import Link from 'next/link';
-import styled from 'styled-components';
+
 import Layout from '../components/Layout';
 import { useAuth } from '../hooks/use-auth';
 import { Button, Form, Input, Label, Text, Title } from '../styles/formStyles';
@@ -11,10 +10,14 @@ const Register = () => {
     <Layout>
       <Title>Register</Title>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ email: '', name: '', password: '' }}
         onSubmit={async (values) => {
           console.log(values);
-          const response = await auth.signup(values.email, values.password);
+          const response = await auth.signup(
+            values.email,
+            values.name,
+            values.password
+          );
           console.log(response);
         }}
         validate={(values) => {
@@ -62,6 +65,17 @@ const Register = () => {
                   type="text"
                   name="email"
                   placeholder="Email"
+                />
+              </Label>
+              <Label>
+                Nickname:
+                <Input
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.name}
+                  type="text"
+                  name="name"
+                  placeholder="name"
                 />
               </Label>
               <Label>

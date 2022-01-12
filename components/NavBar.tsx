@@ -1,10 +1,23 @@
 import { useAuth } from '../hooks/use-auth';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { db } from '../firebase';
 
 const NavBar = (props: any) => {
   const auth = useAuth();
+  const [username, setUsername] = useState('user');
   console.log(auth.user?.uid);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await db.collection('users').doc(auth.user?.uid).get();
+      const formatData = response.data();
+      setUsername(formatData?.name);
+    };
+    getUser();
+  }, [auth]);
+
   return (
     <NavbarContainer>
       <Link href="/" passHref>
@@ -14,7 +27,7 @@ const NavBar = (props: any) => {
       <Menu>
         {auth.user ? (
           <>
-            Account ({auth.user.email})
+            {username} ({auth.user.email})
             <Button onClick={() => auth.signout()}>Signout</Button>
           </>
         ) : (
