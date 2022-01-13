@@ -1,9 +1,10 @@
 import { Formik } from 'formik';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-
 import Layout from '../components/Layout';
 import { useAuth } from '../hooks/use-auth';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 const CreatePost = () => {
   const auth = useAuth();
@@ -14,7 +15,14 @@ const CreatePost = () => {
       <Title>Create a Post</Title>
       <Formik
         initialValues={{ title: '', content: '' }}
-        onSubmit={async (values) => {}}
+        onSubmit={async (values) => {
+          console.log(values);
+          await addDoc(collection(db, 'posts'), {
+            title: values.title,
+            content: values.content,
+            creatorId: auth.user?.uid,
+          });
+        }}
         validate={(values) => {
           let errors = {} as { title: string; content: string };
 
