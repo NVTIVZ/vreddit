@@ -25,7 +25,6 @@ const CreatePost = () => {
         }}
         validate={(values) => {
           let errors = {} as { title: string; content: string };
-
           return errors;
         }}
       >
@@ -43,14 +42,17 @@ const CreatePost = () => {
                 {touched.title && errors.title && (
                   <Text color="#f24b3f">{errors.title}</Text>
                 )}
-                <Input
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.title}
-                  type="text"
-                  name="title"
-                  placeholder="Title"
-                />
+                <Box>
+                  <TitleText
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.title}
+                    name="title"
+                    placeholder="Title"
+                    maxLength={300}
+                  />
+                  <Text color="#c2d6d6">{values.title.length}/300</Text>
+                </Box>
               </Label>
               <Label>
                 {touched.content && errors.content && (
@@ -75,13 +77,43 @@ const CreatePost = () => {
 
 export default CreatePost;
 
+const Box = styled.div`
+  display: flex;
+  flex-direction: row;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  align-items: center;
+  &:focus-within,
+  &:hover {
+    border: 1px solid white;
+  }
+`;
+
+const TitleText = styled.textarea`
+  margin-left: 5px;
+  font-family: inherit;
+  height: 20px;
+  min-height: 15px;
+  resize: none;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #aefeff;
+  outline: none;
+  &::placeholder {
+    color: #aefeff;
+  }
+`;
 const Title = styled.p`
   margin: 30px auto 20px auto;
   font-size: 36px;
   color: #aefeff;
 `;
 
-const Text = styled.p``;
+const Text = styled.p`
+  color: ${(props) => props.color || '#4d4d4d'};
+  margin-right: 5px;
+`;
 
 const Button = styled.button`
   width: 100px;
@@ -125,25 +157,6 @@ const Form = styled.form`
   padding: 20px;
   background: #35858b;
   border-radius: 5px;
-`;
-
-const Input = styled.input`
-  width: 600px;
-  border-radius: 5px;
-  color: #aefeff;
-  background: #35858b;
-  height: 35px;
-  border: 1px solid #ccc;
-  margin-top: 10px;
-  outline: none;
-  padding: 0 5px;
-  &:focus,
-  &:hover {
-    border: 1px solid white;
-  }
-  &::placeholder {
-    color: #aefeff;
-  }
 `;
 
 const Label = styled.label`
