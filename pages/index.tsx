@@ -4,10 +4,37 @@ import Layout from '../components/Layout';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import PostCard from '../components/PostCard';
+import { db } from '../firebase';
+import { useEffect, useState } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+
+interface dataProps {
+  content: string;
+  creatorId: string;
+  postId: string;
+  title: string;
+}
 
 const Home: NextPage = () => {
   const router = useRouter();
+  const [data, setData] = useState<dataProps[]>();
+  useEffect(() => {
+    const retrieveData = async () => {
+      let posty: any = [];
+      const querySnapshot = await getDocs(collection(db, 'posts'));
+      querySnapshot.forEach((doc) => {
+        const retrieved = doc.data();
+        posty.push({
+          postId: doc.id,
+          ...retrieved,
+        });
+      });
+      setData(posty);
+    };
+    retrieveData();
+  }, []);
 
+  console.log(data);
   return (
     <Layout>
       <Flex>
@@ -19,10 +46,17 @@ const Home: NextPage = () => {
             />
           </CreatePost>
           <RetrievedPosts>
-            <PostCard />
-            <PostCard />
-
-            <PostCard />
+            {data
+              ? data.map((post) => (
+                  <PostCard
+                    content={post.content}
+                    creatorId={post.creatorId}
+                    title={post.title}
+                    postId={post.postId}
+                    key={post.postId}
+                  />
+                ))
+              : 'Loading'}
           </RetrievedPosts>
         </MainArea>
         <SideBar></SideBar>

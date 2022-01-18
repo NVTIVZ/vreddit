@@ -1,11 +1,20 @@
 import styled from 'styled-components';
 
-const PostCard = () => {
+interface dataProps {
+  content: string;
+  creatorId: string;
+  postId: string;
+  title: string;
+}
+
+const PostCard = (props: dataProps) => {
   return (
     <Card>
       <Points>0</Points>
       <Preview></Preview>
-      <Content></Content>
+      <Content>
+        <Title>{props.title}</Title>
+      </Content>
     </Card>
   );
 };
@@ -28,6 +37,15 @@ const Points = styled.div`
 const Preview = styled.div`
   width: 80px;
   background: yellow;
+  margin: 5px 0;
+  border-radius: 3px;
 `;
 
-const Content = styled.div``;
+const Content = styled.div`
+  margin-left: 15px;
+  margin: 5px 5px;
+`;
+
+const Title = styled.p`
+  color: white;
+`;

@@ -92,7 +92,7 @@ const Box = styled.div`
 const TitleText = styled.textarea`
   margin-left: 5px;
   font-family: inherit;
-  height: 20px;
+  height: 18px;
   min-height: 15px;
   resize: none;
   width: 100%;
