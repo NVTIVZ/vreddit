@@ -5,14 +5,13 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background: #35858b;
+  background: #f8f0df;
   border-radius: 5px;
 `;
 
 export const Title = styled.p`
   margin: 30px auto 20px auto;
   font-size: 36px;
-  color: #aefeff;
 `;
 
 export const Label = styled.label`
@@ -46,10 +45,11 @@ export const Button = styled.button`
   width: 100px;
   margin: 0 auto;
   border: none;
+  color: white;
   font-weight: 700;
   border-radius: 5px;
   cursor: pointer;
-  background: #4fbdba;
+  background: #4b6587;
   height: 40px;
   margin-top: 20px;
 `;

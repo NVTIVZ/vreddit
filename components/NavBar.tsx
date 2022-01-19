@@ -51,8 +51,8 @@ const NavbarContainer = styled.nav`
   display: flex;
   height: 60px;
   align-items: center;
-  background: #35858b;
-  border-bottom: solid 2px rgba(255, 255, 255, 0.3);
+  background: #c8c6c6;
+  border-bottom: solid 2px black;
 `;
 
 const Logo = styled.div`
@@ -69,10 +69,11 @@ const Menu = styled.div`
 const Button = styled.button`
   cursor: pointer;
   border: none;
+  color: white;
   border-radius: 6px;
   width: 100px;
   height: 40px;
-  background: #4fbdba;
+  background: #232426;
   font-weight: 700;
   margin-left: 10px;
 `;

@@ -51,7 +51,7 @@ const CreatePost = () => {
                     placeholder="Title"
                     maxLength={300}
                   />
-                  <Text color="#c2d6d6">{values.title.length}/300</Text>
+                  <Text color="black">{values.title.length}/300</Text>
                 </Box>
               </Label>
               <Label>
@@ -85,7 +85,7 @@ const Box = styled.div`
   align-items: center;
   &:focus-within,
   &:hover {
-    border: 1px solid white;
+    border: 1px solid black;
   }
 `;
 
@@ -98,16 +98,11 @@ const TitleText = styled.textarea`
   width: 100%;
   background: none;
   border: none;
-  color: #aefeff;
   outline: none;
-  &::placeholder {
-    color: #aefeff;
-  }
 `;
 const Title = styled.p`
   margin: 30px auto 20px auto;
   font-size: 36px;
-  color: #aefeff;
 `;
 
 const Text = styled.p`
@@ -118,35 +113,31 @@ const Text = styled.p`
 const Button = styled.button`
   width: 100px;
   margin: 0 auto;
-
+  color: white;
   border: none;
   font-weight: 700;
   border-radius: 5px;
   cursor: pointer;
-  background: #4fbdba;
+  background: #232426;
   height: 40px;
   margin-top: 20px;
 `;
 
 const TextArea = styled.textarea`
   font-family: inherit;
-  color: #aefeff;
   resize: vertical;
   outline: none;
   width: 600px;
   border-radius: 5px;
   margin-top: 10px;
   min-height: 80px;
-  background: #35858b;
+  background: #f8f0df;
   height: 200px;
   border: 1px solid #ccc;
   padding: 5px;
   &:focus,
   &:hover {
-    border: 1px solid white;
-  }
-  &::placeholder {
-    color: #aefeff;
+    border: 1px solid black;
   }
 `;
 
@@ -155,7 +146,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background: #35858b;
+  background: #f8f0df;
   border-radius: 5px;
 `;
 
