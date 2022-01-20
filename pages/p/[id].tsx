@@ -1,10 +1,19 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { doc, DocumentData, getDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  DocumentData,
+  getDoc,
+  setDoc,
+} from 'firebase/firestore';
 import { db } from '../../firebase';
 
 import Layout from '../../components/Layout';
 import styled from 'styled-components';
+import { Formik } from 'formik';
+import { useAuth } from '../../hooks/use-auth';
 
 interface dataProps {
   content: string;
@@ -15,7 +24,8 @@ interface dataProps {
 const PostPage = () => {
   const router = useRouter();
   const [data, setData] = useState<dataProps | DocumentData>();
-
+  const auth = useAuth();
+  console.log(auth.user?.displayName);
   console.log(router.query.id);
   const { id } = router.query;
   useEffect(() => {
@@ -32,15 +42,54 @@ const PostPage = () => {
   return (
     <Layout>
       <Content>
-        <Points>0</Points>
-        <Post>
-          <Title>{data ? data.title : ''}</Title>
-          <Description>{data ? data.content : ''}</Description>
-          <WriteComment>
-            <TextArea />
-            <Button>Submit</Button>
-          </WriteComment>
-        </Post>
+        <FirstBlock>
+          <Points>0</Points>
+          <Post>
+            <Title>{data ? data.title : ''}</Title>
+            <Description>{data ? data.content : ''}</Description>
+          </Post>
+        </FirstBlock>
+
+        <WriteComment>
+          <Formik
+            initialValues={{ comment: '' }}
+            onSubmit={async (values, { resetForm }) => {
+              try {
+                await addDoc(collection(db, 'comments'), {
+                  creatorId: auth.user?.uid,
+                  content: values.comment,
+                  postId: id,
+                });
+                resetForm();
+              } catch {
+                console.log('Posting Failed');
+              }
+            }}
+          >
+            {({
+              touched,
+              errors,
+              values,
+              handleChange,
+              handleBlur,
+              handleSubmit,
+            }) => {
+              return (
+                <Form onSubmit={handleSubmit}>
+                  <TextArea
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.comment}
+                    name="comment"
+                    placeholder="Comment"
+                  />
+                  <Button type="submit">Submit</Button>
+                </Form>
+              );
+            }}
+          </Formik>
+        </WriteComment>
+        <CommentSection></CommentSection>
       </Content>
     </Layout>
   );
@@ -50,12 +99,20 @@ export default PostPage;
 
 const Content = styled.div`
   margin: 20px auto;
-  min-height: 150px;
-  background: #f8f0df;
+
   display: flex;
-  border-radius: 3px;
+  flex-direction: column;
+
   max-width: 1200px;
   min-width: 900px;
+`;
+
+const FirstBlock = styled.div`
+  display: flex;
+  background: #f8f0df;
+  flex-direction: row;
+  border-radius: 3px;
+  min-height: 150px;
 `;
 
 const Points = styled.div`
@@ -65,7 +122,7 @@ const Points = styled.div`
 const Post = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 5px 15px 0 15px;
+  margin: 5px 30px 0 0px;
   width: 100%;
 `;
 
@@ -82,17 +139,19 @@ const WriteComment = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin-top: 30px;
+  background: #f8f0df;
+  border-radius: 2px;
 `;
 
 const TextArea = styled.textarea`
   resize: vertical;
-  width: 100%;
   min-height: 100px;
+  margin: 20px 10px 0 10px;
 `;
 
 const Button = styled.button`
   width: 100px;
-  margin-left: auto;
   color: white;
   border: none;
   font-weight: 700;
@@ -100,5 +159,17 @@ const Button = styled.button`
   cursor: pointer;
   background: #232426;
   height: 40px;
-  margin-top: 10px;
+
+  margin: 10px 10px 10px auto;
+`;
+
+const CommentSection = styled.div`
+  margin-top: 2px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
 `;
