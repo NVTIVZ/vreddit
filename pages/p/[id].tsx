@@ -7,6 +7,8 @@ import {
   DocumentData,
   getDoc,
   setDoc,
+  arrayUnion,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 
@@ -14,18 +16,19 @@ import Layout from '../../components/Layout';
 import styled from 'styled-components';
 import { Formik } from 'formik';
 import { useAuth } from '../../hooks/use-auth';
+import Comment from '../../components/Comment';
 
 interface dataProps {
   content: string;
   creatorId: string;
   title: string;
+  comments: [];
 }
 
 const PostPage = () => {
   const router = useRouter();
   const [data, setData] = useState<dataProps | DocumentData>();
   const auth = useAuth();
-  console.log(auth.user?.displayName);
   console.log(router.query.id);
   const { id } = router.query;
   useEffect(() => {
@@ -55,10 +58,12 @@ const PostPage = () => {
             initialValues={{ comment: '' }}
             onSubmit={async (values, { resetForm }) => {
               try {
-                await addDoc(collection(db, 'comments'), {
-                  creatorId: auth.user?.uid,
-                  content: values.comment,
-                  postId: id,
+                await updateDoc(doc(db, 'posts', `${id}`), {
+                  comments: arrayUnion({
+                    creatorId: auth.user?.uid,
+                    content: values.comment,
+                    postId: id,
+                  }),
                 });
                 resetForm();
               } catch {
@@ -89,7 +94,13 @@ const PostPage = () => {
             }}
           </Formik>
         </WriteComment>
-        <CommentSection></CommentSection>
+        <CommentSection>
+          {data
+            ? data?.comments.map((comment: any) => (
+                <Comment data={comment} key={comment.postId} />
+              ))
+            : 'Loading'}
+        </CommentSection>
       </Content>
     </Layout>
   );
@@ -164,9 +175,11 @@ const Button = styled.button`
 `;
 
 const CommentSection = styled.div`
-  margin-top: 2px;
+  margin-top: 15px;
   display: flex;
+  background: #f8f0df;
   flex-direction: column;
+  border-radius: 3px;
 `;
 
 const Form = styled.form`

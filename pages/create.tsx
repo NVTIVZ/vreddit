@@ -8,8 +8,7 @@ import { collection, addDoc } from 'firebase/firestore';
 
 const CreatePost = () => {
   const auth = useAuth();
-  const router = useRouter();
-
+  console.log(auth.user?.uid);
   return (
     <Layout>
       <Title>Create a Post</Title>
