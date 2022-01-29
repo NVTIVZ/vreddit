@@ -4,7 +4,6 @@ import styled from 'styled-components';
 const Layout = ({ children }: any) => {
   return (
     <>
-      <NavBar />
       <Wrapper>{children}</Wrapper>
     </>
   );

@@ -65,7 +65,14 @@ const CreatePost = () => {
                   placeholder="Content"
                 />
               </Label>
-              <Button type="submit">Submit</Button>
+              {auth.user?.uid ? (
+                ''
+              ) : (
+                <Text>To create a post you need to be logged in </Text>
+              )}
+              <Button type="submit" disabled={auth.user?.uid ? true : false}>
+                Submit
+              </Button>
             </Form>
           );
         }}

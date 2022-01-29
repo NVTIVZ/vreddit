@@ -7,6 +7,13 @@ interface dataProps {
   creatorId: string;
   postId: string;
   title: string;
+  comments: CommentProps[];
+}
+
+interface CommentProps {
+  content: string;
+  creatorId: string;
+  postId: string;
 }
 
 const PostCard = (props: dataProps) => {
@@ -19,12 +26,9 @@ const PostCard = (props: dataProps) => {
         <Content>
           <Title>{props.title}</Title>
           <Buttons>
-            <Image
-              src="/images/comments.svg"
-              alt="comment"
-              height={20}
-              width={20}
-            />
+            {props.comments.length === 1
+              ? `${props.comments.length} comment`
+              : `${props.comments.length} comments`}
           </Buttons>
         </Content>
       </Card>
@@ -65,4 +69,6 @@ const Title = styled.p``;
 
 const Buttons = styled.div`
   margin-top: auto;
+  font-size: 13px;
+  font-weight: 700;
 `;

@@ -13,6 +13,7 @@ interface dataProps {
   creatorId: string;
   postId: string;
   title: string;
+  comments: [];
 }
 
 const Home: NextPage = () => {
@@ -53,6 +54,7 @@ const Home: NextPage = () => {
                     creatorId={post.creatorId}
                     title={post.title}
                     postId={post.postId}
+                    comments={post.comments}
                     key={post.postId}
                   />
                 ))

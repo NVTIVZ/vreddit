@@ -95,11 +95,11 @@ const PostPage = () => {
           </Formik>
         </WriteComment>
         <CommentSection>
-          {data
-            ? data?.comments.map((comment: any) => (
-                <Comment data={comment} key={comment.postId} />
+          {data?.comments
+            ? data?.comments.map((comment: any, index: number) => (
+                <Comment data={comment} key={index} />
               ))
-            : 'Loading'}
+            : 'There is No Posts'}
         </CommentSection>
       </Content>
     </Layout>

@@ -6,9 +6,9 @@ import { db } from '../firebase';
 
 const NavBar = (props: any) => {
   const auth = useAuth();
-  const [username, setUsername] = useState('user');
+  const [username, setUsername] = useState(null);
   console.log(auth.user?.uid);
-
+  console.log(username);
   useEffect(() => {
     const getUser = async () => {
       const response = await db.collection('users').doc(auth.user?.uid).get();
