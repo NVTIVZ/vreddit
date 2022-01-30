@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import NextLink from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 interface dataProps {
   content: string;
@@ -16,23 +18,44 @@ interface CommentProps {
   postId: string;
 }
 
-const PostCard = (props: dataProps) => {
-  return (
-    <NextLink href={`/p/${props.postId}`}>
-      <Card>
-        <Points>0</Points>
+interface DetailsProps {
+  isActive: boolean;
+}
 
+const PostCard = (props: dataProps) => {
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+  const router = useRouter();
+  console.log(showDetails);
+  return (
+    <>
+      <Card
+        onClick={(e) => {
+          e.stopPropagation();
+          router.push(`/p/${props.postId}`);
+        }}
+      >
+        <Points>0</Points>
         <Preview></Preview>
         <Content>
           <Title>{props.title}</Title>
-          <Buttons>
-            {props.comments.length === 1
-              ? `${props.comments.length} comment`
-              : `${props.comments.length} comments`}
+          <Buttons onClick={(e) => e.stopPropagation()}>
+            {showDetails ? (
+              <Item onClick={() => setShowDetails(false)}>Hide</Item>
+            ) : (
+              <Item onClick={() => setShowDetails(true)}>Show</Item>
+            )}
+            <Item>
+              {props.comments.length === 1
+                ? `${props.comments.length} comment`
+                : `${props.comments.length} comments`}
+            </Item>
           </Buttons>
         </Content>
       </Card>
-    </NextLink>
+      <Details isActive={showDetails}>
+        {showDetails ? props.content : ''}
+      </Details>
+    </>
   );
 };
 
@@ -68,7 +91,22 @@ const Content = styled.div`
 const Title = styled.p``;
 
 const Buttons = styled.div`
+  display: flex;
   margin-top: auto;
   font-size: 13px;
   font-weight: 700;
+  flex-direction: row;
+`;
+
+const Item = styled.div`
+  margin-right: 5px;
+`;
+
+const Details = styled.div<DetailsProps>`
+  background: #f8f0df;
+  ${({ isActive }) =>
+    isActive &&
+    `
+    padding:5px;
+  `}
 `;
