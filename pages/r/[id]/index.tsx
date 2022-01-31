@@ -1,10 +1,9 @@
 import type { NextPage } from 'next';
 import styled from 'styled-components';
-import Layout from '../components/Layout';
-import NextLink from 'next/link';
+import Layout from '../../../components/Layout';
 import { useRouter } from 'next/router';
-import PostCard from '../components/PostCard';
-import { db } from '../firebase';
+import PostCard from '../../../components/PostCard';
+import { db } from '../../../firebase';
 import { useEffect, useState } from 'react';
 import {
   collection,
@@ -26,11 +25,13 @@ interface dataProps {
 const Home: NextPage = () => {
   const router = useRouter();
   const [data, setData] = useState<dataProps[]>();
+
+  const { id } = router.query;
   useEffect(() => {
     const retrieveData = async () => {
       let posty: any = [];
       const querySnapshot = await getDocs(
-        query(collection(db, 'posts'), orderBy('created', 'desc'))
+        query(collection(db, `${id}`), orderBy('created', 'desc'))
       );
       querySnapshot.forEach((doc) => {
         const retrieved = doc.data();
@@ -42,17 +43,19 @@ const Home: NextPage = () => {
       setData(posty);
     };
     retrieveData();
-  }, []);
+  }, [id]);
 
   console.log(data);
   return (
     <Layout>
       <Flex>
         <MainArea>
-          <CreateButton onClick={() => router.push('/create')}>
-            Create a Community
-          </CreateButton>
-
+          <CreatePost>
+            <Input
+              placeholder="Create a Post"
+              onClick={() => router.push('/create')}
+            />
+          </CreatePost>
           <RetrievedPosts>
             {data
               ? data.map((post) => (
@@ -90,13 +93,14 @@ const CreatePost = styled.div`
   border-radius: 3px;
 `;
 
-const CreateButton = styled.button`
-  color: white;
-  background: black;
-  border: none;
-  width: 100px;
-  height: 40px;
+const Input = styled.input`
+  width: 98%;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+  border: 1px solid #ccc;
   border-radius: 3px;
+  margin: 4px 10px 4px 40px;
+  padding: 1px 4px;
 `;
 
 const MainArea = styled.div`

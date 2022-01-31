@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 import NextLink from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { Timestamp } from 'firebase/firestore';
+import moment from 'moment';
+import { db } from '../firebase';
 
 interface dataProps {
   content: string;
   creatorId: string;
   postId: string;
   title: string;
+  created: Timestamp;
   comments: CommentProps[];
 }
 
@@ -25,6 +29,17 @@ interface DetailsProps {
 const PostCard = (props: dataProps) => {
   const [showDetails, setShowDetails] = useState<boolean>(false);
   const router = useRouter();
+  const [username, setUsername] = useState();
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await db.collection('users').doc(props?.creatorId).get();
+      const formatData = response.data();
+      setUsername(formatData?.name);
+    };
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props]);
+
   console.log(showDetails);
   return (
     <>
@@ -38,6 +53,9 @@ const PostCard = (props: dataProps) => {
         <Preview></Preview>
         <Content>
           <Title>{props.title}</Title>
+          <PostCreated>
+            Postedy by {username} {moment(props.created.toDate()).fromNow()}
+          </PostCreated>
           <Buttons onClick={(e) => e.stopPropagation()}>
             {showDetails ? (
               <Item onClick={() => setShowDetails(false)}>Hide</Item>
@@ -76,9 +94,10 @@ const Points = styled.div`
 `;
 
 const Preview = styled.div`
-  width: 80px;
+  min-width: 80px;
   background: gray;
   margin: 5px 0;
+  height: 55px;
   border-radius: 3px;
 `;
 
@@ -89,7 +108,15 @@ const Content = styled.div`
   margin: 5px 5px;
 `;
 
-const Title = styled.p``;
+const Title = styled.p`
+  &:first-letter {
+    text-transform: capitalize;
+  }
+`;
+
+const PostCreated = styled.div`
+  font-size: 13px;
+`;
 
 const Buttons = styled.div`
   display: flex;

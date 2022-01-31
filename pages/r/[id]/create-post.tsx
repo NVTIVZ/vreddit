@@ -1,38 +1,33 @@
 import { Formik } from 'formik';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import Layout from '../components/Layout';
-import { useAuth } from '../hooks/use-auth';
-import firebaseApp, { db } from '../firebase';
-import {
-  collection,
-  addDoc,
-  serverTimestamp,
-  setDoc,
-  doc,
-} from 'firebase/firestore';
+import Layout from '../../../components/Layout';
+import { useAuth } from '../../../hooks/use-auth';
+import { db } from '../../../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const CreatePost = () => {
   const auth = useAuth();
   console.log(auth.user?.uid);
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <Layout>
-      <Title>Create a Community</Title>
+      <Title>Create a Post</Title>
       <Formik
         initialValues={{ title: '', content: '' }}
         onSubmit={async (values) => {
           console.log(values);
-          await setDoc(doc(db, values.title, 'info'), {
-            desc: values.content,
+          await addDoc(collection(db, `${id}`), {
+            title: values.title,
+            content: values.content,
             creatorId: auth.user?.uid,
-            createdWhen: serverTimestamp(),
+            created: serverTimestamp(),
           });
         }}
         validate={(values) => {
           let errors = {} as { title: string; content: string };
-          if (values.title.length > 21) {
-            errors.title = 'Community name cannot be longer than 21 characters';
-          }
           return errors;
         }}
       >
@@ -57,9 +52,9 @@ const CreatePost = () => {
                     value={values.title}
                     name="title"
                     placeholder="Title"
-                    maxLength={21}
+                    maxLength={300}
                   />
-                  <Text color="black">{values.title.length}/21</Text>
+                  <Text color="black">{values.title.length}/300</Text>
                 </Box>
               </Label>
               <Label>
@@ -77,7 +72,7 @@ const CreatePost = () => {
               {auth.user?.uid ? (
                 ''
               ) : (
-                <Text>To create a community you need to be logged in </Text>
+                <Text>To create a post you need to be logged in </Text>
               )}
               <Button type="submit" disabled={auth.user?.uid ? false : true}>
                 Submit
