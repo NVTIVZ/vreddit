@@ -9,6 +9,7 @@ import {
   setDoc,
   arrayUnion,
   updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 
@@ -28,6 +29,7 @@ interface dataProps {
 const PostPage = () => {
   const router = useRouter();
   const [data, setData] = useState<dataProps | DocumentData>();
+  const [username, setUsername] = useState();
   const auth = useAuth();
   console.log(router.query.id);
   const { id } = router.query;
@@ -41,6 +43,26 @@ const PostPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await db.collection('users').doc(data?.creatorId).get();
+      const formatData = response.data();
+      setUsername(formatData?.name);
+    };
+    getUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  const deletePost = async () => {
+    try {
+      await deleteDoc(doc(db, 'posts', `${id}`));
+      router.push('/');
+    } catch {
+      console.log('Deleting failed');
+    }
+  };
+
   console.log(data);
   return (
     <Layout>
@@ -48,9 +70,21 @@ const PostPage = () => {
         <FirstBlock>
           <Points>0</Points>
           <Post>
+            <Info>Posted by {username}</Info>
             <Title>{data ? data.title : ''}</Title>
             <Description>{data ? data.content : ''}</Description>
           </Post>
+          {auth.user?.uid === data?.creatorId ? (
+            <Delete
+              onClick={() => {
+                deletePost();
+              }}
+            >
+              Delete Post
+            </Delete>
+          ) : (
+            ''
+          )}
         </FirstBlock>
 
         <WriteComment>
@@ -124,10 +158,16 @@ const FirstBlock = styled.div`
   flex-direction: row;
   border-radius: 3px;
   min-height: 150px;
+  position: relative;
 `;
 
 const Points = styled.div`
-  margin: 10px 15px 0 15px;
+  margin: 30px 15px 0 15px;
+`;
+
+const Info = styled.div`
+  font-size: 13px;
+  font-weight: 600;
 `;
 
 const Post = styled.div`
@@ -139,6 +179,7 @@ const Post = styled.div`
 
 const Title = styled.p`
   font-size: 22px;
+  margin-top: 5px;
 `;
 
 const Description = styled.p`
@@ -185,4 +226,14 @@ const CommentSection = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+`;
+
+const Delete = styled.div`
+  position: absolute;
+  font-size: 12px;
+  right: 0;
+  bottom: 0;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  cursor: pointer;
 `;

@@ -45,9 +45,9 @@ const PostCard = (props: dataProps) => {
               <Item onClick={() => setShowDetails(true)}>Show</Item>
             )}
             <Item>
-              {props.comments.length === 1
-                ? `${props.comments.length} comment`
-                : `${props.comments.length} comments`}
+              {props.comments?.length === 1
+                ? `${props.comments?.length} comment`
+                : `${props.comments?.length || 0} comments`}
             </Item>
           </Buttons>
         </Content>
@@ -66,6 +66,7 @@ const Card = styled.div`
   flex-direction: row;
   min-height: 65px;
   background: #f8f0df;
+  cursor: pointer;
 `;
 
 const Points = styled.div`
