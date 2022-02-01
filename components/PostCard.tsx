@@ -14,6 +14,7 @@ interface dataProps {
   title: string;
   created: Timestamp;
   comments: CommentProps[];
+  community: string | string[] | undefined;
 }
 
 interface CommentProps {
@@ -46,7 +47,7 @@ const PostCard = (props: dataProps) => {
       <Card
         onClick={(e) => {
           e.stopPropagation();
-          router.push(`/p/${props.postId}`);
+          router.push(`/r/${props.community}/${props.postId}`);
         }}
       >
         <Points>0</Points>

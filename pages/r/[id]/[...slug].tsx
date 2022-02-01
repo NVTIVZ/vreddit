@@ -11,13 +11,13 @@ import {
   updateDoc,
   deleteDoc,
 } from 'firebase/firestore';
-import { db } from '../../firebase';
+import { db } from '../../../firebase';
 
-import Layout from '../../components/Layout';
+import Layout from '../../../components/Layout';
 import styled from 'styled-components';
 import { Formik } from 'formik';
-import { useAuth } from '../../hooks/use-auth';
-import Comment from '../../components/Comment';
+import { useAuth } from '../../../hooks/use-auth';
+import Comment from '../../../components/Comment';
 
 interface dataProps {
   content: string;
@@ -31,11 +31,12 @@ const PostPage = () => {
   const [data, setData] = useState<dataProps | DocumentData>();
   const [username, setUsername] = useState();
   const auth = useAuth();
-  console.log(router.query.id);
-  const { id } = router.query;
+  console.log(router.query);
+  const { id, slug } = router.query;
+
   useEffect(() => {
     const retrieveData = async () => {
-      const document = await getDoc(doc(db, 'posts', `${id}`));
+      const document = await getDoc(doc(db, `${id}`, `${slug}`));
       const formated = document.data();
       setData(formated);
     };
@@ -43,7 +44,7 @@ const PostPage = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
-
+  console.log(data);
   useEffect(() => {
     const getUser = async () => {
       const response = await db.collection('users').doc(data?.creatorId).get();
@@ -56,7 +57,7 @@ const PostPage = () => {
 
   const deletePost = async () => {
     try {
-      await deleteDoc(doc(db, 'posts', `${id}`));
+      await deleteDoc(doc(db, 'posts', `${slug}`));
       router.push('/');
     } catch {
       console.log('Deleting failed');
@@ -92,11 +93,11 @@ const PostPage = () => {
             initialValues={{ comment: '' }}
             onSubmit={async (values, { resetForm }) => {
               try {
-                await updateDoc(doc(db, 'posts', `${id}`), {
+                await updateDoc(doc(db, `${id}`, `${slug}`), {
                   comments: arrayUnion({
                     creatorId: auth.user?.uid,
                     content: values.comment,
-                    postId: id,
+                    postId: slug![0],
                   }),
                 });
                 resetForm();

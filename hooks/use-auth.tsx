@@ -35,7 +35,6 @@ function useProvideAuth() {
     const response = await firebase
       .auth()
       .signInWithEmailAndPassword(email, password);
-
     setUser(response.user);
     return response.user;
   };

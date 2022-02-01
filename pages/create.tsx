@@ -22,7 +22,7 @@ const CreatePost = () => {
         initialValues={{ title: '', content: '' }}
         onSubmit={async (values) => {
           console.log(values);
-          await setDoc(doc(db, values.title, 'info'), {
+          await setDoc(doc(db, values.title.toLocaleLowerCase(), 'info'), {
             desc: values.content,
             creatorId: auth.user?.uid,
             createdWhen: serverTimestamp(),

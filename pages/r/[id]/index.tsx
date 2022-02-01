@@ -44,7 +44,7 @@ const Home: NextPage = () => {
     };
     retrieveData();
   }, [id]);
-
+  console.log(id);
   console.log(data);
   return (
     <Layout>
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
           <CreatePost>
             <Input
               placeholder="Create a Post"
-              onClick={() => router.push('/create')}
+              onClick={() => router.push(`/r/${id}/create-post`)}
             />
           </CreatePost>
           <RetrievedPosts>
@@ -67,6 +67,7 @@ const Home: NextPage = () => {
                     comments={post.comments}
                     created={post.created}
                     key={post.postId}
+                    community={id}
                   />
                 ))
               : 'Loading'}
